@@ -1,0 +1,12 @@
+/Users/lucioreyli/Documents/Codes/csharp/fin-system/Utils/bin/Debug/net6.0/Utils.deps.json
+/Users/lucioreyli/Documents/Codes/csharp/fin-system/Utils/bin/Debug/net6.0/Utils.dll
+/Users/lucioreyli/Documents/Codes/csharp/fin-system/Utils/bin/Debug/net6.0/Utils.pdb
+/Users/lucioreyli/Documents/Codes/csharp/fin-system/Utils/obj/Debug/net6.0/Utils.csproj.AssemblyReference.cache
+/Users/lucioreyli/Documents/Codes/csharp/fin-system/Utils/obj/Debug/net6.0/Utils.GeneratedMSBuildEditorConfig.editorconfig
+/Users/lucioreyli/Documents/Codes/csharp/fin-system/Utils/obj/Debug/net6.0/Utils.AssemblyInfoInputs.cache
+/Users/lucioreyli/Documents/Codes/csharp/fin-system/Utils/obj/Debug/net6.0/Utils.AssemblyInfo.cs
+/Users/lucioreyli/Documents/Codes/csharp/fin-system/Utils/obj/Debug/net6.0/Utils.csproj.CoreCompileInputs.cache
+/Users/lucioreyli/Documents/Codes/csharp/fin-system/Utils/obj/Debug/net6.0/Utils.dll
+/Users/lucioreyli/Documents/Codes/csharp/fin-system/Utils/obj/Debug/net6.0/refint/Utils.dll
+/Users/lucioreyli/Documents/Codes/csharp/fin-system/Utils/obj/Debug/net6.0/Utils.pdb
+/Users/lucioreyli/Documents/Codes/csharp/fin-system/Utils/obj/Debug/net6.0/ref/Utils.dll
