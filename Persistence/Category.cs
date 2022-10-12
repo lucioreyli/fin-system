@@ -32,4 +32,31 @@ public class Category
     this.conn.Close();
     return category;
   }
+
+
+  public List<CategoryModel> ListAllTransactions()
+  {
+    List<CategoryModel> categories = new List<CategoryModel>();
+    StringBuilder commandStr = new StringBuilder("");
+    commandStr.AppendLine("SELECT Category.id, Category.name FROM Category");
+    MySqlCommand command = new MySqlCommand(commandStr.ToString(), this.conn);
+    this.conn.Open();
+
+    using (MySqlDataReader dataReader = command.ExecuteReader())
+    {
+      while (dataReader.Read())
+      {
+        int category_id = Convert.ToInt32(dataReader["id"].ToString());
+        CategoryModel category = new CategoryModel
+        {
+          id = Convert.ToInt32(dataReader["id"].ToString())!,
+          name = dataReader["name"].ToString()!,
+        };
+        categories.Add(category);
+      }
+    }
+
+    this.conn.Close();
+    return categories;
+  }
 }

@@ -4,9 +4,12 @@ using static System.Console;
 namespace Utils;
 public class Utils
 {
+
   public static void MountMenu()
   {
-    WriteLine("FinSystem @ lucioroadtoglory");
+    string programTitle = "FinSystem @ lucioroadtoglory";
+    Title = programTitle;
+    WriteLine(programTitle);
     WriteLine("----------------------------");
     WriteLine("Select a option:");
     WriteLine("1 - List");
@@ -21,5 +24,11 @@ public class Utils
   public static void MountHeader(string title, char code = '-', int len = 30)
   {
     WriteLine($"{new string(code, len)} {title} {new string(code, len)}");
+  }
+
+  public static string FormatSearchDate(string date)
+  {
+    string[] temp = date.Split('/');
+    return string.Join('-', temp.Reverse());
   }
 }
