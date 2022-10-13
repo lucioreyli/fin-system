@@ -5,14 +5,8 @@ public class Transaction
 {
   public int? id { get; private set;  }
   public string description { get; private set; }
-  public char type { get; private set; }
-  private char _type {
-    set => this.type = value.Equals('P') || value.Equals('R') ? value :
-       throw new Exception(
-         $"{value} is a invalid option! Available options: P - Payment | R - Receipt"
-       );
-  }
   public double value { get; private set; }
+  public char type { get; private set; }
   public DateTime expiration_date { get; private set; }
   public Category category { get; private set; }
 
