@@ -1,6 +1,7 @@
 ﻿using System;
 using MySqlConnector;
 using BetterConsoleTables;
+using Database;
 using static System.Console;
 using TransactionModel = Model.Transaction;
 using CategoryModel = Model.Category;
@@ -12,16 +13,10 @@ class Program {
   private List<TransactionModel> transactions = new List<TransactionModel>();
   private List<CategoryModel> categories = new List<CategoryModel>();
 
-  private TransactionRepository transaction;
-  private CategoryRepository category;
-
-  public Program()
-  {
-    string connectionString = Database.Connection.GetStringConnection();
-    MySqlConnection conn = new MySqlConnection(connectionString);
-    this.transaction = new TransactionRepository(conn);
-    this.category = new CategoryRepository(conn);
-  }
+  static string connectionString = Database.Connection.GetStringConnection();
+  static MySqlConnection conn = new MySqlConnection(connectionString);
+  private TransactionRepository transaction = new TransactionRepository(conn);
+  private CategoryRepository category = new CategoryRepository(conn);
 
   static void Main() {
     Clear();
@@ -46,23 +41,7 @@ class Program {
       {
         case 1:
           Utils.Utils.MountHeader("List transactions");
-          self.transactions = self.transaction.ListAllTransactions();
-          Table transactionsTable = new Table(
-            "ID",
-            "Description",
-            "Type",
-            "Value",
-            "Expiration date"
-          );
-          foreach (TransactionModel transaction in self.transactions)
-            transactionsTable.AddRow(
-              transaction.id,
-              transaction.description,
-              transaction.type.Equals('R') ? "Receive" : "Payment",
-              String.Format("{0:c}", transaction.value),
-              String.Format("{0:dd/MM/yyyy}", transaction.expiration_date)
-            );
-          Write(transactionsTable.ToString());
+          ListTransactions(self);
           break;
 
         case 2:
@@ -90,16 +69,13 @@ class Program {
           Write(categoriesTable.ToString());
           int categoryId = Convert.ToInt32(ReadLine());
           CategoryModel category = self.category.GetCategory(categoryId);
-
-          TransactionModel newTransaction = new TransactionModel
-          {
-            description = transactionDescription,
-            value = transactionValue,
-            type = transactionType,
-            expiration_date = transactionExpirationDate,
-            category = category,
-          };
-
+          TransactionModel newTransaction = new TransactionModel(
+            transactionDescription,
+            transactionValue,
+            transactionType,
+            transactionExpirationDate,
+            category
+          );
 
           self.transaction.SaveTransaction(newTransaction);
           ForegroundColor = ConsoleColor.Green;
@@ -112,23 +88,7 @@ class Program {
 
         case 4:
           Utils.Utils.MountHeader("Delete transaction");
-          self.transactions = self.transaction.ListAllTransactions();
-          transactionsTable = new Table(
-            "ID",
-            "Description",
-            "Type",
-            "Value",
-            "Expiration date"
-          );
-          foreach (TransactionModel transaction in self.transactions)
-            transactionsTable.AddRow(
-              transaction.id,
-              transaction.description,
-              transaction.type.Equals('R') ? "Receive" : "Payment",
-              String.Format("{0:c}", transaction.value),
-              String.Format("{0:dd/MM/yyyy}", transaction.expiration_date)
-            );
-          Write(transactionsTable.ToString());
+          ListTransactions(self);
           Write("Select a transaction by ID to delete: ");
           int transactionToDelete = Convert.ToInt32(ReadLine());
           self.transaction.DeleteTransaction(transactionToDelete);
@@ -140,35 +100,32 @@ class Program {
         case 5:
           Utils.Utils.MountHeader("Relatory");
           Utils.Utils.MountHeader("Search by date (dd/mm/yyyy)");
-
           Write("Initial date (dd/mm/yyyy): ");
           string? initialDate = ReadLine();
           Write("End date (dd/mm/yyyy): ");
           string? endDate = ReadLine();
-          self.transactions = self.transaction.ListAllTransactions(
-            initialDate,
-            endDate
-          );
-          Table relatoryTable = new Table(
-            "ID",
-            "Description",
-            "Type",
-            "Value",
-            "Expiration date"
-          );
-          foreach (TransactionModel transaction in self.transactions)
-            relatoryTable.AddRow(
-              transaction.id,
-              transaction.description,
-              transaction.type.Equals('R') ? "Receive" : "Payment",
-              String.Format("{0:c}", transaction.value),
-              String.Format("{0:dd/MM/yyyy}", transaction.expiration_date)
-            );
-          Write(relatoryTable.ToString());
+          ListTransactions(self, initialDate ?? "", endDate ?? "");
           break;
       }
       ReadKey();
       Clear();
     } while (option != 6);
+  }
+
+  static void ListTransactions(
+    Program ctx, string initialDate = "", string endDate = ""
+  )
+  {
+    Table table = new Table("ID", "Description", "Type", "Value","Expiration date");
+    var transactions = ctx.transaction.ListAllTransactions(initialDate, endDate);
+    foreach (TransactionModel transaction in transactions)
+      table.AddRow(
+        transaction.id,
+        transaction.description,
+        transaction.type.Equals('R') ? "Receive" : "Payment",
+        String.Format("{0:c}", transaction.value),
+        String.Format("{0:dd/MM/yyyy}", transaction.expiration_date)
+      );
+    Write(table.ToString());
   }
 }

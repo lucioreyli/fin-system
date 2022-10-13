@@ -63,16 +63,18 @@ public class Transaction
       while (dataReader.Read())
       {
         int category_id = Convert.ToInt32(dataReader["category_id"].ToString());
-        TransactionModel transaction = new TransactionModel
-        {
-          id = Convert.ToInt32(dataReader["id"].ToString())!,
-          description = dataReader["description"].ToString(),
-          type = Convert.ToChar(dataReader["type"].ToString()!),
-          value = Convert.ToDouble(dataReader["value"].ToString()),
-          category = this.category.GetCategory(category_id),
-          expiration_date = Convert.ToDateTime(
+        TransactionModel transaction = new TransactionModel(
+          Convert.ToInt32(dataReader["id"].ToString())!,
+          dataReader["description"].ToString()!,
+          Convert.ToDouble(dataReader["value"].ToString()),
+          Convert.ToChar(dataReader["type"].ToString()!),
+          Convert.ToDateTime(
             dataReader["expiration_date"].ToString()
-          )
+          ),
+          this.category.GetCategory(category_id)
+        )
+        {
+          
         };
         transactions.Add(transaction);
       }

@@ -13,8 +13,6 @@ public class Category
 
   public CategoryModel GetCategory(int id)
   {
-    CategoryModel category = new CategoryModel();
-
     StringBuilder commandStr = new StringBuilder("");
     commandStr.AppendLine("SELECT Category.id, Category.name FROM Category");
     commandStr.AppendLine("WHERE Category.id = @id");
@@ -22,13 +20,12 @@ public class Category
     command.Parameters.AddWithValue("@id", id);
     this.conn.Open();
 
-    using (MySqlDataReader dataReader = command.ExecuteReader())
-    {
-      dataReader.Read();
-      category.id = Convert.ToInt32(dataReader["id"].ToString());
-      category.name = dataReader["name"].ToString()!;
-    }
-
+    MySqlDataReader dataReader = command.ExecuteReader();
+    dataReader.Read();
+    CategoryModel category = new CategoryModel(
+      Convert.ToInt32(dataReader["id"].ToString()),
+      dataReader["name"].ToString()!
+    );
     this.conn.Close();
     return category;
   }
@@ -46,12 +43,10 @@ public class Category
     {
       while (dataReader.Read())
       {
-        int category_id = Convert.ToInt32(dataReader["id"].ToString());
-        CategoryModel category = new CategoryModel
-        {
-          id = Convert.ToInt32(dataReader["id"].ToString())!,
-          name = dataReader["name"].ToString()!,
-        };
+        CategoryModel category = new CategoryModel(
+          Convert.ToInt32(dataReader["id"].ToString())!,
+          dataReader["name"].ToString()!
+        ); 
         categories.Add(category);
       }
     }
